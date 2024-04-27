@@ -137,7 +137,7 @@ app.get("/api/user/:username", (req, res) => {
     const username = req.params.username
     const sqlSelect = "SELECT Username FROM MODERATOR_ACCOUNT WHERE Username=$1"
 
-    db.query(sqlSelect, username, (err, result) => {
+    db.query(sqlSelect, [username], (err, result) => {
         if (err) {
             res.status(500).send({
                 message: "Error when checking Username"
