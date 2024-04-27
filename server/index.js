@@ -1,26 +1,31 @@
+require('dotenv').config();
 
 const express = require('express');
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express();
-const mysql = require("mysql")
+const { Pool } = require('pg')
 
-//Connect to database
-const db = mysql.createPool({
-    connectionLimit : 100,
-    host: 'us-cluster-east-01.k8s.cleardb.net',
-    user: 'bf584a8f14c1f4',
-    password: 'fa777a0f',
-    database: 'heroku_9d118cca2f87709',
-    debug: false
+// Connect to databas
+// Not using .env file because hosting online
+const db = new Pool({
+  connectionLimit: 100,
+  host: 'aws-0-ca-central-1.pooler.supabase.com',
+  user: 'postgres.drzovxoxtufhivwffoyd',
+  password: 'F#G#A129!pumpkin',
+  database: 'postgres',
+  port: '5432',
+  ssl: {
+      rejectUnauthorized: false
+  }
 });
 
 app.use(cors())
 app.use(express.json()) // Used for parsing application/json
 app.use(bodyParser.urlencoded({extended: true})) // For parsing application/x-www-form-urlencoded
 
-app.listen(process.env.PORT || 3001, () => {
-    console.log("running");
+app.listen(5432, () => {
+  console.log("Server is running");
 });
 
 // -------------------------------------------------------------------------------------------------------------------
