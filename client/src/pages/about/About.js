@@ -9,7 +9,7 @@ const About = () => {
             </h1>
             <p>
             Universities offer a massive amount of courses. The information needed to make an informed decision on what courses
-            to take can be a difficult and time consuming. Information such as which courses are required for a certain degrees, which 
+            to take can be a difficult and time consuming to find. Information such as which courses are required for a certain degrees, which 
             courses are pre requisites for future required courses, what the profs and syllabi past courses were and when certain courses are typically taught are spread across several
             different websites. In addition, some of these websites require are laid out in such a way where acquiring this information
             unescissarly requires visiting several pages. Without this information a student could find themselves missing a course required for their
