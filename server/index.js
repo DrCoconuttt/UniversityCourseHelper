@@ -167,7 +167,11 @@ app.get("/api/courseList", (req, res) => {
         if (err) {
           console.error("Error fetching courses:", err);
           res.status(500).send("Internal Server Error");
-        } else res.send(result)
+        } else {
+          console.error("GOT COURSES");
+          console.error(result);
+          res.send(result)
+        }
     });
 })
 
