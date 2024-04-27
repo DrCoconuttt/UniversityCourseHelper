@@ -196,7 +196,7 @@ app.get("/api/courseInfo/:course_name/semester", (req, res) => {
         "SELECT s.sem_start_year, s.sem_start_term, s.duration " + 
         "FROM SEMESTER AS s " +
         "WHERE s.course_name = $1 " +
-        "ORDER BY s.sem_start_year DESC, s.ordering DESC")
+        "ORDER BY s.sem_start_year DESC, s.Ordering DESC")
     db.query(sqlSelect, [course_name], (err, result) => {
         if (err) {
             res.status(500).send({
