@@ -1,0 +1,376 @@
+* {
+  font-family: Arial
+}
+
+hr {
+  border: solid #79615A;
+  margin-top: 15px;
+}
+
+html {background-color: #F5F4F9;}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}  
+
+.centerText {
+  text-align: center;
+}
+
+/*
+------------------------------------------------------------------------------------------------------------
+-------------------------------------------------- Navbar --------------------------------------------------
+------------------------------------------------------------------------------------------------------------
+*/
+
+.navbar {
+  width: 100%;
+  height: 75px;
+  background-color: #4C7E66;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  top: 0px;
+}
+
+.navbarLeft{
+  flex: 3;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-left: 60px;
+}
+
+.navbarCenter{
+  flex: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbarRight{
+  flex: 3;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-right: 60px;
+}
+
+.navbar a {
+  color: #F5F4F9;
+  text-decoration: none;
+  padding: 10px;
+}
+
+.navbar a:hover {
+  color: #F8DD4E;
+}
+
+.shortButton {
+  cursor: pointer;
+  background-color: #F8DD4E;
+  font-weight: 600;
+  padding: 6px;
+  border: none;
+  border-radius: 100px;
+  width: 60px;
+  align-self: center;
+}
+
+.longButton {
+  cursor: pointer;
+  background-color: #F8DD4E;
+  font-weight: 600;
+  padding: 6px;
+  border: none;
+  border-radius: 100px;
+  width: 120px;
+  align-self: center;
+}
+
+.aboutIcon {
+  height: 30px;
+  width: 30px;
+  font-size: 30px;
+  background: radial-gradient(circle, black 30%, #4C7E66 30%);
+  cursor: pointer;
+}
+
+/*
+------------------------------------------------------------------------------------------------------------
+-------------------------------------------------- About Page ----------------------------------------------
+------------------------------------------------------------------------------------------------------------
+*/
+
+.about{
+  margin: auto;
+  margin-top: 35px;
+  width: 50%;
+}
+
+.about a {
+  color: black;
+  text-decoration: none;
+  padding: 10px;
+}
+
+.about a:hover {
+  color: #6C6ED6;
+}
+
+.githubIconAlign{
+  display: flex;
+  justify-content: center;
+}
+
+.githubIcon {
+  margin-top: 25px;
+  font-size: 55px;
+  cursor: pointer;
+}
+
+
+
+/*
+------------------------------------------------------------------------------------------------------------
+-------------------------------------------------- List Pages ----------------------------------------------
+------------------------------------------------------------------------------------------------------------
+*/
+
+.listTitle{
+  font-size: 40px;
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  overflow: auto;
+}
+
+.listSearch{
+  padding-top: 15px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  overflow: auto;
+  height: 30px;
+}
+
+.list{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.listDisplay {
+  cursor: pointer;
+  font-size: 150%;
+  font-weight: 700;
+  padding: 10px;
+}
+
+.headingSimulation{
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/*
+------------------------------------------------------------------------------------------------------------
+-------------------------------------------------- Info Pages ----------------------------------------------
+------------------------------------------------------------------------------------------------------------
+*/
+
+.headingSimulationLarge{
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.smallText{
+  font-size: small;
+  color: #767676
+}
+
+.bold{
+  font-weight: bold;
+}
+
+.info{
+  margin: auto;
+  margin-top: 35px;
+  width: 65%;
+}
+
+.semesterInline{
+  display: inline-block;
+  vertical-align:top;
+  height: auto;
+  padding-right: 20px;
+  padding-bottom: 30px;
+}
+
+.ratingCreateAlign{
+  display: flex;
+  justify-content: center;
+}
+
+.ratingPostedAlign{
+  display: flex;
+  justify-content: left;
+}
+
+.rating {
+  background-color: #6C6ED6;
+  width: 400px;
+  margin: 15px;
+  padding-top: 23px;
+  padding-bottom: 16px;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.ratingDropdown {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ratingComment {
+  resize: none;
+  width: 100%;
+  height: 100px;
+  font-size: 17px;
+  margin-top: 7px;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: center;
+}
+
+.commentWraping{
+  width:100%;
+  word-wrap: break-word;
+}
+
+.reportDropdown {
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ratingButtonAlign  {
+  display: flex;
+  justify-content: center;
+}
+
+.ratingButton {
+  cursor: pointer;
+  background-color: #F8DD4E;
+  font-weight: 600;
+  padding: 6px;
+  border: none;
+  border-radius: 100px;
+  width: 120px;
+  display: flex;
+  justify-content: center;
+}
+
+.modifyButton {
+  cursor: pointer;
+  background-color: #6C6ED6;
+  color: #FFFFFF;
+  font-weight: 600;
+  padding: 6px;
+  margin-top: 3px;
+  margin-right: 3px;
+  border: none;
+  border-radius: 100px;
+  width: 60px;
+  align-self: center;
+}
+
+.modifyButtonBig {
+  cursor: pointer;
+  background-color: #6C6ED6;
+  color: #FFFFFF;
+  font-weight: 600;
+  padding: 8px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 100px;
+  width: 140px;
+  align-self: center;
+}
+
+/*
+------------------------------------------------------------------------------------------------------------
+-------------------------------------------------- Account Pages -------------------------------------------
+------------------------------------------------------------------------------------------------------------
+*/
+
+.accountAlign{
+  display: flex;
+  justify-content: center;
+}
+
+.account {
+  background-color: #6C6ED6;
+  width: 425px;
+  margin: 15px;
+  padding-top: 23px;
+  padding-bottom: 55px;
+  padding-left: 70px;
+  padding-right: 70px;
+  margin-top: 100px;
+}
+
+.accountText{
+  display: flex;
+  justify-content: center;
+  color: #FFFFFF;
+}
+
+.accountHeadingSimulation{
+  display: flex;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.accountTextSmall{
+  display: flex;
+  justify-content: center;
+  font-size: small;
+  color: #FFFFFF;
+}
+
+.accountInput {
+  resize: none;
+  width: 95%;
+  height: 40px;
+  margin: 5px;
+  font-size: 17px;
+  display: flex;
+  justify-content: center;
+}
+
+.accountButtonAlign  {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+.accountButton {
+  cursor: pointer;
+  background-color: #F8DD4E;
+  font-weight: 600;
+  padding: 8px;
+  border: none;
+  border-radius: 100px;
+  width: 140px;
+  display: flex;
+  justify-content: center;
+}
+
+  
