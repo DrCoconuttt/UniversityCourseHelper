@@ -24,7 +24,7 @@ const CreateAccount = () => {
         // Attempt to create account using entered username and password
         try {
             // Check if username in database
-            const usernameAlreadyDefined = await Axios.get(`https://university-course-helper.herokuapp.com/api/user/${Username}`)
+            const usernameAlreadyDefined = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/user/${Username}`)
             const data = await usernameAlreadyDefined.data
 
             if (data) {
@@ -32,7 +32,7 @@ const CreateAccount = () => {
                 setFailure(true)
             } else {
                 // If username is not already defined create a new account
-                Axios.post(`https://university-course-helper.herokuapp.com/api/user/`, {
+                Axios.post(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/user/`, {
                     username : Username,
                     password : Password
                 })

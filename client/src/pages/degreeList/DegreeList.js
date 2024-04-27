@@ -16,7 +16,7 @@ const DegreeList = () => {
     // Updates the list of degrees, storing types major, minor and other seperatly
     useEffect(() => {
         const getDegreesMajor = async () => {
-            const DegreesMajor = await Axios.get("https://university-course-helper.herokuapp.com/api/degreeList/major")
+            const DegreesMajor = await Axios.get("https://universitycoursehelperdeployednetlifyren.onrender.com/api/degreeList/major")
             const data = await DegreesMajor.data
             setDegreeListMajor(data)
         }
@@ -26,7 +26,7 @@ const DegreeList = () => {
         
     useEffect(() => {
         const getDegreesMinor = async () => {
-            const DegreesMinor = await Axios.get("https://university-course-helper.herokuapp.com/api/degreeList/minor")
+            const DegreesMinor = await Axios.get("https://universitycoursehelperdeployednetlifyren.onrender.com/api/degreeList/minor")
             const data = await DegreesMinor.data
             setDegreeListMinor(data)
         }
@@ -35,7 +35,7 @@ const DegreeList = () => {
 
     useEffect(() => {
         const getDegreesOther = async () => {
-            const DegreesOther = await Axios.get("https://university-course-helper.herokuapp.com/api/degreeList/other")
+            const DegreesOther = await Axios.get("https://universitycoursehelperdeployednetlifyren.onrender.com/api/degreeList/other")
             const data = await DegreesOther.data
             setDegreeListOther(data)
         }

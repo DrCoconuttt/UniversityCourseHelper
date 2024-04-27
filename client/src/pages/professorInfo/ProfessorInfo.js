@@ -17,7 +17,7 @@ const ProfInfo = () => {
     // Call apis (for more info on what each does look at client > index.js)
     useEffect(() => {
         const getProfessors = async () => {
-            const professors = await Axios.get(`https://university-course-helper.herokuapp.com/api/profInfo/${name}`)
+            const professors = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/profInfo/${name}`)
             const data = await professors.data
             setProfInfo(data)
         }
@@ -26,7 +26,7 @@ const ProfInfo = () => {
 
     useEffect(() => {
         const getCourses = async () => {
-            const courses = await Axios.get(`https://university-course-helper.herokuapp.com/api/profInfo/${name}/courses`)
+            const courses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/profInfo/${name}/courses`)
             const data = await courses.data
             setCourseInfo(data)
         }

@@ -16,7 +16,7 @@ const ReportInfo = () => {
     // Fetching the report information from the database
     useEffect(() => {
         const fetchReportInfo = async () => {
-            const reports = await Axios.get(`https://university-course-helper.herokuapp.com/api/reportInfo/${pathname}`)
+            const reports = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/reportInfo/${pathname}`)
             const data = await reports.data
             setReportInfo(data)
         }
@@ -26,7 +26,7 @@ const ReportInfo = () => {
     // Fetch the rating information from the database
     useEffect(() => {
         const fetchRatingInfo = async () => {
-            const rating = await Axios.get(`https://university-course-helper.herokuapp.com/api/reportInfo/${pathname}/rating`)
+            const rating = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/reportInfo/${pathname}/rating`)
             const data = await rating.data
             setRatingInfo(data)
         }
@@ -35,13 +35,13 @@ const ReportInfo = () => {
 
     // Delete a Report
     const deleteReport = async (id) => {
-        await Axios.delete(`https://university-course-helper.herokuapp.com/api/reportInfo/${id}`)
+        await Axios.delete(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/reportInfo/${id}`)
         window.location.reload();
     }
 
     // Delete a Rating
     const deleteRating = async (id) => {
-        await Axios.delete(`https://university-course-helper.herokuapp.com/api/rating/${id}`)
+        await Axios.delete(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/rating/${id}`)
         window.location.reload();
     }
 

@@ -14,7 +14,7 @@ const ProfessorList = () => {
     // Updates the list of professors
     useEffect(() => {
         const getProfessors = async () => {
-            const Professors = await Axios.get("https://university-course-helper.herokuapp.com/api/profList")
+            const Professors = await Axios.get("https://universitycoursehelperdeployednetlifyren.onrender.com/api/profList")
             const data = await Professors.data
             setProfessorList(data)
         }

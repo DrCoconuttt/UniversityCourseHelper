@@ -24,7 +24,7 @@ const EditAccount = () => {
 
         // Attempt to edit account using entered new username and new password
         try {
-            await Axios.put(`https://university-course-helper.herokuapp.com/api/user/${localStorage.getItem("user")}`, {newUsername, newPassword})
+            await Axios.put(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/user/${localStorage.getItem("user")}`, {newUsername, newPassword})
             successfulUpdate = true
         } catch (err) {   
             console.log(err.response.data.message)

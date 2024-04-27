@@ -14,7 +14,7 @@ const ReportList = () => {
     // Updates the list of courses
     useEffect(() => {
         const getReports = async () => {
-            const reports = await Axios.get("https://university-course-helper.herokuapp.com/api/reportList")
+            const reports = await Axios.get("https://universitycoursehelperdeployednetlifyren.onrender.com/api/reportList")
             const data = await reports.data
             setReportList(data)
             setReportLoaded(true)

@@ -15,7 +15,7 @@ const CourseList = () => {
     // Update the list of courses
     useEffect(() => {
         const getCourses = async () => {
-            const courses = await Axios.get(`https://university-course-helper.herokuapp.com/api/courseList`)
+            const courses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/courseList`)
             const data = await courses.data
             setCourseList(data)
         }

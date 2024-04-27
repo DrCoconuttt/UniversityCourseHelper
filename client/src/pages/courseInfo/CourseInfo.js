@@ -30,7 +30,7 @@ const CourseInfo = () => {
     // Call get apis (for more info on what each does look at client > index.js)
     useEffect(() => {
         const getCourses = async () => {
-            const courses = await Axios.get(`https://university-course-helper.herokuapp.com/api/courseInfo/${name}`)
+            const courses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/courseInfo/${name}`)
             const data = await courses.data
             setCourseInfo(data)
         }
@@ -39,7 +39,7 @@ const CourseInfo = () => {
 
     useEffect(() => {
         const getSemester = async () => {
-            const courses = await Axios.get(`https://university-course-helper.herokuapp.com/api/courseInfo/${name}/semester`)
+            const courses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/courseInfo/${name}/semester`)
             const data = await courses.data
             setSemesterInfo(data)
         }
@@ -48,7 +48,7 @@ const CourseInfo = () => {
 
     useEffect(() => {
         const getDegreeRequired = async () => {
-            const courses = await Axios.get(`https://university-course-helper.herokuapp.com/api/courseInfo/${name}/degreeRequired`)
+            const courses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/courseInfo/${name}/degreeRequired`)
             const data = await courses.data
             setDegreeRequiredInfo(data)
         }
@@ -57,7 +57,7 @@ const CourseInfo = () => {
 
     useEffect(() => {
         const getDegreeOptional = async () => {
-            const courses = await Axios.get(`https://university-course-helper.herokuapp.com/api/courseInfo/${name}/degreeOptional`)
+            const courses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/courseInfo/${name}/degreeOptional`)
             const data = await courses.data
             setDegreeOptionalInfo(data)
         }
@@ -66,7 +66,7 @@ const CourseInfo = () => {
 
     useEffect(() => {
         const getRatings = async () => {
-            const ratings = await Axios.get(`https://university-course-helper.herokuapp.com/api/rating/${name}`)
+            const ratings = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/rating/${name}`)
             const data = await ratings.data
             setGetRatings(data)
         }
@@ -85,7 +85,7 @@ const CourseInfo = () => {
         else{
             if(!localStorage.getItem("user")){
                 try{
-                    await Axios.post(`https://university-course-helper.herokuapp.com/api/rating/${name}`, {
+                    await Axios.post(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/rating/${name}`, {
                         score,
                         comment,
                         rating_date: new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 10),
@@ -100,7 +100,7 @@ const CourseInfo = () => {
             }
             else{
                 try{
-                    await Axios.post(`https://university-course-helper.herokuapp.com/api/rating/${name}`, {
+                    await Axios.post(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/rating/${name}`, {
                         score,
                         comment,
                         rating_date: new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 10),
@@ -138,7 +138,7 @@ const CourseInfo = () => {
         }
         else{
             try{
-                await Axios.put(`https://university-course-helper.herokuapp.com/api/rating/${ratingIdEdit}`, {
+                await Axios.put(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/rating/${ratingIdEdit}`, {
                     username: localStorage.getItem("user"),
                     score: scoreEdit,
                     comment: commentEdit,
@@ -153,7 +153,7 @@ const CourseInfo = () => {
     }
 
     const deleteRating = async (id) => {
-        await Axios.delete(`https://university-course-helper.herokuapp.com/api/rating/${id}`).then(() => {
+        await Axios.delete(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/rating/${id}`).then(() => {
             window.location.reload();
         });
     }
@@ -178,7 +178,7 @@ const CourseInfo = () => {
             e.preventDefault();
             try{
                 alert("Report Submitted")
-                await Axios.post(`https://university-course-helper.herokuapp.com/api/reportInfo`, {
+                await Axios.post(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/reportInfo`, {
                     reason: reportReason,
                     report_date: new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 10),
                     rating_id: ratingIdReport,

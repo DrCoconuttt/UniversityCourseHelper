@@ -24,7 +24,7 @@ const Login = ({onLogin}) => {
         }
 
         // Fetch whether the password was accurate or not from database
-        const check = await Axios.get(`https://university-course-helper.herokuapp.com/api/user/${username}/${password}`)
+        const check = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/user/${username}/${password}`)
         const data = await check.data
 
         // Log in if passowrd is accurate

@@ -18,7 +18,7 @@ const DegreeInfo = () => {
     // Call get apis (for more info on what each does look at client > index.js)
     useEffect(() => {
         const getDegrees = async () => {
-            const degrees = await Axios.get(`https://university-course-helper.herokuapp.com/api/degreeInfo/${name}`)
+            const degrees = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/degreeInfo/${name}`)
             const data = await degrees.data
             setDegreeInfo(data)
         }
@@ -27,7 +27,7 @@ const DegreeInfo = () => {
 
     useEffect(() => {
         const getRequiredCourses = async () => {
-            const requiredCourses = await Axios.get(`https://university-course-helper.herokuapp.com/api/degreeInfo/${name}/coursesRequired`)
+            const requiredCourses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/degreeInfo/${name}/coursesRequired`)
             const data = await requiredCourses.data
             setRequiredCourseInfo(data)
         }
@@ -36,7 +36,7 @@ const DegreeInfo = () => {
 
     useEffect(() => {
         const getOptionalCourses = async () => {
-            const optionalCourses = await Axios.get(`https://university-course-helper.herokuapp.com/api/degreeInfo/${name}/coursesOptional`)
+            const optionalCourses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/degreeInfo/${name}/coursesOptional`)
             const data = await optionalCourses.data
             setOptionalCourseInfo(data)
         }

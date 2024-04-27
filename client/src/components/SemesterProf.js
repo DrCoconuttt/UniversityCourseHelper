@@ -12,7 +12,7 @@ const SemesterProf = ({name, startYear, startTerm}) => {
     // Call apis (for more info on what each does look at client > index.js) 
     useEffect(() => {
             const getSemesterProf = async () => {
-                const courses = await Axios.get(`https://university-course-helper.herokuapp.com/api/courseInfo/${name}/${startYear}/${startTerm}/professor`)
+                const courses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/courseInfo/${name}/${startYear}/${startTerm}/professor`)
                 const data = await courses.data
                 setSemesterProfInfo(data)
             }
