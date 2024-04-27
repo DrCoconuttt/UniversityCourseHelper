@@ -176,7 +176,7 @@ app.get("/api/courseList", (req, res) => {
 app.get("/api/courseInfo/:Course_name", (req, res) => {
     const course_name = req.params.Course_name
     const sqlSelect = "SELECT * FROM COURSE as c WHERE c.Course_name = $1"
-    db.query(sqlSelect, course_name, (err, result) => {
+    db.query(sqlSelect, [course_name], (err, result) => {
         if (err) {
             res.status(500).send({
                 message: "Error when fetching course information"
@@ -194,7 +194,7 @@ app.get("/api/courseInfo/:Course_name/semester", (req, res) => {
         "FROM SEMESTER AS s " +
         "WHERE s.Course_name = $1 " +
         "ORDER BY s.Sem_start_year DESC, s.Ordering DESC")
-    db.query(sqlSelect, course_name, (err, result) => {
+    db.query(sqlSelect, [course_name], (err, result) => {
         if (err) {
             res.status(500).send({
                 message: "Error when fetching semester information"
@@ -231,7 +231,7 @@ app.get("/api/courseInfo/:Course_name/degreeRequired", (req, res) => {
         "SELECT r.Degree_name " + 
         "FROM REQUIRED_FOR AS r " + 
         "WHERE r.Course_name = $1" )
-    db.query(sqlSelect, course_name, (err, result) => {
+    db.query(sqlSelect, [course_name], (err, result) => {
         if (err) {
             res.status(500).send({
                 message: "Error when fetching required degree information"
@@ -248,7 +248,7 @@ app.get("/api/courseInfo/:Course_name/degreeOptional", (req, res) => {
         "SELECT o.Degree_name " + 
         "FROM OPTIONAL_FOR as o " + 
         "WHERE o.Course_name = $1" )
-    db.query(sqlSelect, course_name, (err, result) => {
+    db.query(sqlSelect, [course_name], (err, result) => {
         if (err) {
             res.status(500).send({
                 message: "Error when fetching optional degree information"
@@ -279,7 +279,7 @@ app.get("/api/profList", (req, res) => {
 app.get("/api/profInfo/:prof_name", (req, res) => {
     const prof_name = req.params.prof_name
     const sqlSelect = "SELECT * FROM PROFESSOR AS p WHERE p.Prof_name = $1" 
-    db.query(sqlSelect, prof_name, (err, result) => {
+    db.query(sqlSelect, [prof_name], (err, result) => {
         if (err) {
             res.status(500).send({
                 message: "Error when fetching professor information"
@@ -296,7 +296,7 @@ app.get("/api/profInfo/:prof_name/courses", (req, res) => {
         "SELECT DISTINCT o.Course_name " + 
         "FROM OFFERED_IN AS o NATURAL JOIN PROFESSOR AS p " + 
         "WHERE p.Prof_name = $1")
-    db.query(sqlSelect, prof_name, (err, result) => {
+    db.query(sqlSelect, [prof_name], (err, result) => {
         if (err) {
             res.status(500).send({
                 message: "Error when fetching course information"
@@ -353,7 +353,7 @@ app.get("/api/degreeList/other", (req, res) => {
 app.get("/api/degreeInfo/:degree_name", (req, res) => {
     const degree_name = req.params.degree_name
     const sqlSelect = "SELECT * FROM DEGREE AS d WHERE d.Degree_name = $1" 
-    db.query(sqlSelect, degree_name, (err, result) => {
+    db.query(sqlSelect, [degree_name], (err, result) => {
         if (err) {
             res.status(500).send({
                 message: "Error when fetching degree information"
@@ -370,7 +370,7 @@ app.get("/api/degreeInfo/:degree_name/coursesRequired", (req, res) => {
         "SELECT r.Course_name " +
         "FROM REQUIRED_FOR AS r NATURAL JOIN DEGREE as d " +
         "WHERE d.Degree_name = $1" )
-    db.query(sqlSelect, degree_name, (err, result) => {
+    db.query(sqlSelect, [degree_name], (err, result) => {
         if (err) {
             res.status(500).send({
                 message: "Error when fetching course information"
@@ -387,7 +387,7 @@ app.get("/api/degreeInfo/:degree_name/coursesOptional", (req, res) => {
         "SELECT o.Course_name " +
         "FROM OPTIONAL_FOR AS o NATURAL JOIN DEGREE as d " +
         "WHERE d.Degree_name = $1" )
-    db.query(sqlSelect, degree_name, (err, result) => {
+    db.query(sqlSelect, [degree_name], (err, result) => {
         if (err) {
             res.status(500).send({
                 message: "Error when fetching optional courses"
@@ -408,7 +408,7 @@ app.get("/api/rating/:course_name", (req, res) => {
         "SELECT r.Rating_id, r.Comment, r.Score, r.Rating_date, r.Username " +
         "FROM RATING as r " +
         "WHERE r.Course_name = $1" )
-    db.query(sqlSelect, course_name, (err, result) => {
+    db.query(sqlSelect, [course_name], (err, result) => {
         if (err) {
             res.status(500).send({
                 message: "Error when fetching ratings"
@@ -465,7 +465,7 @@ app.put("/api/rating/:rating_id", (req, res) => {
 app.delete("/api/rating/:rating_id", (req, res) => {
     const rating_id = req.params.rating_id
     const sqlDelete = "DELETE FROM RATING WHERE Rating_id = $1"
-    db.query(sqlDelete, rating_id, (err, result) => {
+    db.query(sqlDelete, [rating_id], (err, result) => {
         if (err) {
             res.status(500).send({
                 message: "Error when deleting rating"
@@ -496,7 +496,7 @@ app.get("/api/reportList", (req, res) => {
 app.get("/api/reportInfo/:report_id", (req, res) => {
     const report_id = req.params.report_id
     const sqlSelect = "SELECT * FROM REPORT WHERE Report_id=$1"
-    db.query(sqlSelect, report_id, (err, result) => {
+    db.query(sqlSelect, [report_id], (err, result) => {
         if (err) {
             res.status(500).send({
                 message: "Error when fetching report information"
@@ -512,7 +512,7 @@ app.get("/api/reportInfo/:report_id/rating", (req, res) => {
     const sqlSelect = "SELECT rt.Rating_id, rt.Comment, rt.Score, rt.Rating_date, rt.Username, rt.Course_name " + 
         "FROM REPORT AS rp NATURAL JOIN RATING AS rt " + 
         "WHERE rp.Report_id=$1"
-    db.query(sqlSelect, report_id, (err, result) => {
+    db.query(sqlSelect, [report_id], (err, result) => {
         if (err) {
             res.status(500).send({
                 message: "Error when fetching rating information"
@@ -543,7 +543,7 @@ app.post("/api/reportInfo", (req, res) => {
 app.delete("/api/reportInfo/:report_id", (req, res) => {
     const report_id = req.params.report_id
     const sqlDelete = "DELETE FROM REPORT WHERE Report_id = $1"
-    db.query(sqlDelete, report_id, (err, result) => {
+    db.query(sqlDelete, [report_id], (err, result) => {
         if (err) {
             res.status(500).send({
                 message: "Error when deleting report"
