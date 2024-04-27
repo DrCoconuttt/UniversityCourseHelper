@@ -31,7 +31,7 @@ const CourseInfo = () => {
     useEffect(() => {
         const getCourses = async () => {
             const courses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/courseInfo/${name}`)
-            const data = await courses.data
+            const data = await courses.data.rows
             setCourseInfo(data)
         }
         getCourses()
@@ -40,7 +40,7 @@ const CourseInfo = () => {
     useEffect(() => {
         const getSemester = async () => {
             const courses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/courseInfo/${name}/semester`)
-            const data = await courses.data
+            const data = await courses.data.rows
             setSemesterInfo(data)
         }
         getSemester()
@@ -49,7 +49,7 @@ const CourseInfo = () => {
     useEffect(() => {
         const getDegreeRequired = async () => {
             const courses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/courseInfo/${name}/degreeRequired`)
-            const data = await courses.data
+            const data = await courses.data.rows
             setDegreeRequiredInfo(data)
         }
         getDegreeRequired()
@@ -58,7 +58,7 @@ const CourseInfo = () => {
     useEffect(() => {
         const getDegreeOptional = async () => {
             const courses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/courseInfo/${name}/degreeOptional`)
-            const data = await courses.data
+            const data = await courses.data.rows
             setDegreeOptionalInfo(data)
         }
         getDegreeOptional()
@@ -67,7 +67,7 @@ const CourseInfo = () => {
     useEffect(() => {
         const getRatings = async () => {
             const ratings = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/rating/${name}`)
-            const data = await ratings.data
+            const data = await ratings.data.rows
             setGetRatings(data)
         }
         getRatings()
@@ -195,25 +195,25 @@ const CourseInfo = () => {
             {/*generic course info */}
             {courseInfo.map((course) => {
                 return(
-                    <div key={course.Course_name} value={course}>
+                    <div key={course.course_name} value={course}>
                         <h1 className="centerText">
-                            {course.Course_name}
+                            {course.course_name}
                         </h1>
                         <div>
-                            {course.Course_description}
+                            {course.course_description}
                         </div>
                         <br>
                         </br>
                         <div>
-                            - Hours: {course.Hours}
+                            - Hours: {course.hours}
                         </div>
                         <div>
                             - Prerequisites: {' '}
-                            {!!(course.Prerequisites)? course.Prerequisites : 'No prerequisites listed'}
+                            {!!(course.prerequisites)? course.prerequisites : 'No prerequisites listed'}
                         </div>
                         <div>
                             - Antirequisites: {' '}
-                            {!!(course.Antirequisites)? course.Antirequisites : 'No antirequisites listed'}
+                            {!!(course.antirequisites)? course.antirequisites : 'No antirequisites listed'}
                         </div>
 
                         <hr />
@@ -225,17 +225,17 @@ const CourseInfo = () => {
                         <div>
                             {semesterInfo.map((sem) => {
                                 return(
-                                    <span className = "semesterInline" key={[sem.Sem_start_year, sem.Sem_start_term]} value={sem}>
+                                    <span className = "semesterInline" key={[sem.sem_start_year, sem.sem_start_term]} value={sem}>
                                         <div className = "headingSimulation">
-                                            {sem.Sem_start_year} {' '}
-                                            {sem.Sem_start_term}
+                                            {sem.sem_start_year} {' '}
+                                            {sem.sem_start_term}
                                         </div>
                                         <div className = "smallText">
-                                            Duration: {sem.Duration} months
+                                            Duration: {sem.duration} months
                                         </div>
                                         <div>
                                             {/* semesterProf returns information on further info on semester (related to prof) as well as prof info*/}
-                                            {<SemesterProf name = {course.Course_name} startYear = {sem.Sem_start_year} startTerm = {sem.Sem_start_term} />}
+                                            {<SemesterProf name = {course.course_name} startYear = {sem.sem_start_year} startTerm = {sem.sem_start_term} />}
                                         </div>
                                     </span>
                                 );
@@ -260,8 +260,8 @@ const CourseInfo = () => {
                         {/*info on how the course related to degrees*/}
                         {degreeRequiredInfo.map((required) => {
                             return(
-                                <div key={required.Degree_name} value={required}>
-                                    <Link to={`/degrees/${required.Degree_name}`} style={{ textDecoration: 'none' }}>{required.Degree_name}</Link>
+                                <div key={required.degree_name} value={required}>
+                                    <Link to={`/degrees/${required.degree_name}`} style={{ textDecoration: 'none' }}>{required.degree_name}</Link>
                                 </div>
                             );
                         })}
@@ -272,8 +272,8 @@ const CourseInfo = () => {
                         <br></br>
                         {degreeOptionalInfo.map((optional) => {
                             return(
-                                <div key={optional.Degree_name} value={optional}>
-                                    <Link to={`/degrees/${optional.Degree_name}`} style={{ textDecoration: 'none' }}>{optional.Degree_name}</Link>
+                                <div key={optional.degree_name} value={optional}>
+                                    <Link to={`/degrees/${optional.degree_name}`} style={{ textDecoration: 'none' }}>{optional.degree_name}</Link>
                                 </div>
                             );
                         })}
@@ -319,26 +319,26 @@ const CourseInfo = () => {
 
                         {getRatings.map((rating) => {
                             return(
-                                <div key={rating.Rating_id} value={rating}>
+                                <div key={rating.rating_id} value={rating}>
                                     {/*list all ratings for the given class*/}                     
                                     <div className = "bold">
                                         Posted: {' '}
-                                        {rating.Rating_date.slice(0, 10)}
-                                        {!!(rating.Username)? ` By moderator ${rating.Username}` : ''}     
+                                        {rating.rating_date.slice(0, 10)}
+                                        {!!(rating.username)? ` By moderator ${rating.username}` : ''}     
                                     </div>
                                     <div>
                                         Rating: {' '}
-                                        {rating.Score}
+                                        {rating.score}
                                         /5
                                     </div>
                                     <div className="commentWraping">
-                                        {!rating.Comment? (<></>) : (<>
+                                        {!rating.comment? (<></>) : (<>
                                             Comment: {' '}
-                                            {rating.Comment}
+                                            {rating.comment}
                                         </>)}
                                     </div>
-                                    {isEditRating === rating.Rating_id? ( <div> 
-                                        <SaveRatingIdEdit ratingIdEdit = {rating.Rating_id}/>
+                                    {isEditRating === rating.rating_id? ( <div> 
+                                        <SaveRatingIdEdit ratingIdEdit = {rating.rating_id}/>
                                         {/*form for editing ratings when edit button is pressed*/}
                                         <div className="ratingPostedAlign"> 
                                             <form className="rating" onSubmit={editRating}>  
@@ -371,8 +371,8 @@ const CourseInfo = () => {
                                             <button className="modifyButton" type="submit" onClick={() => setIsEditRating(null)}> Cancel </button>
                                         </div>
                                     </div> ) : ( <div> 
-                                        {isCreateReport === rating.Rating_id? ( <div> 
-                                            <SaveRatingIdReport ratingIdReport = {rating.Rating_id}/>
+                                        {isCreateReport === rating.rating_id? ( <div> 
+                                            <SaveRatingIdReport ratingIdReport = {rating.rating_id}/>
                                             {/*form for creating reports when report button is pressed*/} 
                                             <div className="ratingPostedAlign"> 
                                                 <form className="rating" onSubmit={createReport}>  
@@ -398,12 +398,12 @@ const CourseInfo = () => {
                                             <div>
                                                 {/*check user is logged in as well as if they are the one who posted the rating to see if they can edit the rating*/}
                                                 {!localStorage.getItem("user") ? '' : <>
-                                                    {localStorage.getItem("user") === rating.Username ? <button className="modifyButton" type="submit" onClick={() => setIsEditRating(rating.Rating_id)}> Edit </button> : '' }
+                                                    {localStorage.getItem("user") === rating.username ? <button className="modifyButton" type="submit" onClick={() => setIsEditRating(rating.rating_id)}> Edit </button> : '' }
                                                 </> }
                                                 {/*check user is logged in to see if they can delete the rating*/}
-                                                {!localStorage.getItem("user") ? '' : <button className="modifyButton" type="submit" onClick={() => deleteRating(rating.Rating_id)}> Delete </button>}
+                                                {!localStorage.getItem("user") ? '' : <button className="modifyButton" type="submit" onClick={() => deleteRating(rating.rating_id)}> Delete </button>}
 
-                                                <button className="modifyButton" type="submit" onClick={() => setIsCreateReport(rating.Rating_id)}> Report </button>
+                                                <button className="modifyButton" type="submit" onClick={() => setIsCreateReport(rating.rating_id)}> Report </button>
                                             </div>
                                         </>)}
                                     </div>)}  

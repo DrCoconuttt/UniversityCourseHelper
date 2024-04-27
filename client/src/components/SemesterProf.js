@@ -13,7 +13,7 @@ const SemesterProf = ({name, startYear, startTerm}) => {
     useEffect(() => {
             const getSemesterProf = async () => {
                 const courses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/courseInfo/${name}/${startYear}/${startTerm}/professor`)
-                const data = await courses.data
+                const data = await courses.data.rows
                 setSemesterProfInfo(data)
             }
             getSemesterProf()
@@ -24,26 +24,26 @@ const SemesterProf = ({name, startYear, startTerm}) => {
         <div>
             {semesterProfInfo.map((semProf) => {
                 return(
-                    <div key={semProf.Prof_name} value={semProf}>
+                    <div key={semProf.prof_name} value={semProf}>
                         <div>
                             <br>
                             </br>
                             <div>
-                                <Link to={`/professors/${semProf.Prof_name}`} style={{ textDecoration: 'none' }}>{semProf.Prof_name}</Link>
+                                <Link to={`/professors/${semProf.prof_name}`} style={{ textDecoration: 'none' }}>{semProf.prof_name}</Link>
                             </div>
                             <div>
                                 Rating (rate my professor): {' '}
-                                {!!(semProf.Prof_rating)? semProf.Prof_rating : 'Not rated'}
+                                {!!(semProf.prof_rating)? semProf.prof_rating : 'Not rated'}
                             </div>
                             <div>
                                 Mode of delivery: {' '}
-                                {!!(semProf.Mode_of_delivery)? semProf.Mode_of_delivery : 'Not listed'}
+                                {!!(semProf.mode_of_delivery)? semProf.mode_of_delivery : 'Not listed'}
                             </div>
                             <div>
-                                {!!(semProf.Rate_my_professor_link)? <a target="_blank" rel="noopener noreferrer" href={semProf.Rate_my_professor_link} > Rate my professor</a> : ''}
+                                {!!(semProf.rate_my_professor_link)? <a target="_blank" rel="noopener noreferrer" href={semProf.rate_my_professor_link} > Rate my professor</a> : ''}
                             </div>
                             <div>
-                                {!!(semProf.Syllabus_link)? <a target="_blank" rel="noopener noreferrer" href={semProf.Syllabus_link} > Syllabus</a> : 'No syllabus provided'}
+                                {!!(semProf.syllabus_link)? <a target="_blank" rel="noopener noreferrer" href={semProf.syllabus_link} > Syllabus</a> : 'No syllabus provided'}
                             </div>
                         </div>
                     </div>

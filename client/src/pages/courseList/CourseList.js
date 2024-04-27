@@ -16,7 +16,7 @@ const CourseList = () => {
     useEffect(() => {
         const getCourses = async () => {
             const courses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/courseList`)
-            const data = await courses.data
+            const data = await courses.data.rows
             setCourseList(data)
         }
         getCourses()

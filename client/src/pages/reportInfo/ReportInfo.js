@@ -17,7 +17,7 @@ const ReportInfo = () => {
     useEffect(() => {
         const fetchReportInfo = async () => {
             const reports = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/reportInfo/${pathname}`)
-            const data = await reports.data
+            const data = await reports.data.rows
             setReportInfo(data)
         }
         fetchReportInfo()
@@ -27,7 +27,7 @@ const ReportInfo = () => {
     useEffect(() => {
         const fetchRatingInfo = async () => {
             const rating = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/reportInfo/${pathname}/rating`)
-            const data = await rating.data
+            const data = await rating.data.rows
             setRatingInfo(data)
         }
         fetchRatingInfo()
@@ -51,17 +51,17 @@ const ReportInfo = () => {
             {/* Display report info */}
             {reportInfo.map((report) => {
             return(
-                <div key={report.Report_id} value={report}>
+                <div key={report.report_id} value={report}>
                     <h1 className="centerText">
                         Report
                     </h1>
                     <div className = "bold">
                         Reported: {' '}
-                        {report.Report_date.slice(0, 10)}
+                        {report.report_date.slice(0, 10)}
                     </div>
                     <div>
                         Reason: {' '}
-                        {report.Reason}
+                        {report.reason}
                     </div>
 
                     <hr />
@@ -74,33 +74,33 @@ const ReportInfo = () => {
                             </h1>
                             {ratingInfo.map((rating) => {
                                 return(
-                                    <div key={rating.Rating_id} value={rating}>
+                                    <div key={rating.rating_id} value={rating}>
                                         {/*list all ratings for the given class*/}                     
                                         <div className = "bold">
                                             Posted: {' '}
-                                            {rating.Rating_date.slice(0, 10)}
-                                            {!!(rating.Username)? ` By moderator ${rating.Username}` : ''}     
+                                            {rating.rating_date.slice(0, 10)}
+                                            {!!(rating.username)? ` By moderator ${rating.username}` : ''}     
                                         </div>
                                         <div>
                                             Rating: {' '}
-                                            {rating.Score}
+                                            {rating.score}
                                             /5
                                         </div>
                                         <div className="commentWraping">
                                             Comment: {' '}
-                                            {rating.Comment}
+                                            {rating.comment}
                                         </div>
 
                                         <br></br>
                                         
                                         <Link to="/reports">
-                                            <button onClick={() => deleteReport(report.Report_id)}
+                                            <button onClick={() => deleteReport(report.report_id)}
                                                 className="modifyButtonBig">
                                                 Reject Report
                                             </button>
                                         </Link>
                                         <Link to="/reports">
-                                            <button onClick={() => deleteRating(rating.Rating_id)}
+                                            <button onClick={() => deleteRating(rating.rating_id)}
                                                 className="modifyButtonBig">
                                                 Accept Report
                                             </button>

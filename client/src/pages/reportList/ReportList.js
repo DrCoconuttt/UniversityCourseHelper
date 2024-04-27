@@ -15,7 +15,7 @@ const ReportList = () => {
     useEffect(() => {
         const getReports = async () => {
             const reports = await Axios.get("https://universitycoursehelperdeployednetlifyren.onrender.com/api/reportList")
-            const data = await reports.data
+            const data = await reports.data.rows
             setReportList(data)
             setReportLoaded(true)
         }

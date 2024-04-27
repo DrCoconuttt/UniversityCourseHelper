@@ -15,7 +15,7 @@ const ProfessorList = () => {
     useEffect(() => {
         const getProfessors = async () => {
             const Professors = await Axios.get("https://universitycoursehelperdeployednetlifyren.onrender.com/api/profList")
-            const data = await Professors.data
+            const data = await Professors.data.rows
             setProfessorList(data)
         }
         getProfessors()

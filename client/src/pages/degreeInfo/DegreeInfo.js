@@ -19,7 +19,7 @@ const DegreeInfo = () => {
     useEffect(() => {
         const getDegrees = async () => {
             const degrees = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/degreeInfo/${name}`)
-            const data = await degrees.data
+            const data = await degrees.data.rows
             setDegreeInfo(data)
         }
         getDegrees()
@@ -28,7 +28,7 @@ const DegreeInfo = () => {
     useEffect(() => {
         const getRequiredCourses = async () => {
             const requiredCourses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/degreeInfo/${name}/coursesRequired`)
-            const data = await requiredCourses.data
+            const data = await requiredCourses.data.rows
             setRequiredCourseInfo(data)
         }
         getRequiredCourses()
@@ -37,7 +37,7 @@ const DegreeInfo = () => {
     useEffect(() => {
         const getOptionalCourses = async () => {
             const optionalCourses = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/degreeInfo/${name}/coursesOptional`)
-            const data = await optionalCourses.data
+            const data = await optionalCourses.data.rows
             setOptionalCourseInfo(data)
         }
         getOptionalCourses()
@@ -48,12 +48,12 @@ const DegreeInfo = () => {
         <div className = "info">
             {degreeInfo.map((degree) => {
                 return(
-                    <div key={degree.Degree_name} value={degree}>
+                    <div key={degree.degree_name} value={degree}>
                         <h1 className="centerText">
-                            {degree.Degree_name}
+                            {degree.degree_name}
                         </h1> 
                         <div>
-                            <a target="_blank" rel="noopener noreferrer" href={degree.Degree_link} > Detailed degree information</a>
+                            <a target="_blank" rel="noopener noreferrer" href={degree.degree_link} > Detailed degree information</a>
                         </div>
                         <hr />
                         {/* only print courses if looking at major or minor degree, not other (other has flag 3) */}
@@ -77,8 +77,8 @@ const DegreeInfo = () => {
                         }
                         {requiredCourseInfo.map((course) => { 
                             return(
-                                <div key={course.Course_name} value={course}>
-                                    <Link to={`/courses/${course.Course_name}`} style={{ textDecoration: 'none' }}>{course.Course_name}</Link>
+                                <div key={course.course_name} value={course}>
+                                    <Link to={`/courses/${course.course_name}`} style={{ textDecoration: 'none' }}>{course.course_name}</Link>
                                 </div>
                             );
                         })}
@@ -95,8 +95,8 @@ const DegreeInfo = () => {
                         }
                         {optionalCourseInfo.map((course) => {
                             return(
-                                <div key={course.Course_name} value={course}>
-                                    <Link to={`/courses/${course.Course_name}`} style={{ textDecoration: 'none' }}>{course.Course_name}</Link>
+                                <div key={course.course_name} value={course}>
+                                    <Link to={`/courses/${course.course_name}`} style={{ textDecoration: 'none' }}>{course.course_name}</Link>
                                 </div>
                             );
                         })}

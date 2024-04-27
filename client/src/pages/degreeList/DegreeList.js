@@ -17,7 +17,7 @@ const DegreeList = () => {
     useEffect(() => {
         const getDegreesMajor = async () => {
             const DegreesMajor = await Axios.get("https://universitycoursehelperdeployednetlifyren.onrender.com/api/degreeList/major")
-            const data = await DegreesMajor.data
+            const data = await DegreesMajor.data.rows
             setDegreeListMajor(data)
         }
         getDegreesMajor()
@@ -27,7 +27,7 @@ const DegreeList = () => {
     useEffect(() => {
         const getDegreesMinor = async () => {
             const DegreesMinor = await Axios.get("https://universitycoursehelperdeployednetlifyren.onrender.com/api/degreeList/minor")
-            const data = await DegreesMinor.data
+            const data = await DegreesMinor.data.rows
             setDegreeListMinor(data)
         }
         getDegreesMinor()
@@ -36,7 +36,7 @@ const DegreeList = () => {
     useEffect(() => {
         const getDegreesOther = async () => {
             const DegreesOther = await Axios.get("https://universitycoursehelperdeployednetlifyren.onrender.com/api/degreeList/other")
-            const data = await DegreesOther.data
+            const data = await DegreesOther.data.rows
             setDegreeListOther(data)
         }
         getDegreesOther()

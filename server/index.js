@@ -51,7 +51,7 @@ async function encryptCreate(req, res){
 
     const encryptedPassword = await bcrypt.hash(password, saltRounds)
 
-    const sqlInsert = "INSERT INTO MODERATOR_ACCOUNT (Username, Password) VALUES ($1,$2)"
+    const sqlInsert = "INSERT INTO MODERATOR_ACCOUNT (username, password) VALUES ($1,$2)"
     db.query(sqlInsert, [username, encryptedPassword], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -77,7 +77,7 @@ async function encryptEdit(req, res){
 
     // Deal with case of user entering same username they already had
     if(newUsername != currentUsername){
-        const sqlInsert = "UPDATE MODERATOR_ACCOUNT AS a SET a.Password=$1, a.Username=$2 WHERE a.Username=$3"
+        const sqlInsert = "UPDATE MODERATOR_ACCOUNT AS a SET a.password=$1, a.username=$2 WHERE a.username=$3"
         db.query(sqlInsert, [encryptedNewPassword, newUsername, currentUsername], (err, result) => {
             if (err) {
                 res.status(500).send({
@@ -88,7 +88,7 @@ async function encryptEdit(req, res){
     }
     //deal with case of user entering new username
     else{
-        const sqlInsert = "UPDATE MODERATOR_ACCOUNT AS a SET a.Password=$1 WHERE a.Username=$2"
+        const sqlInsert = "UPDATE MODERATOR_ACCOUNT AS a SET a.password=$1 WHERE a.username=$2"
         db.query(sqlInsert, [encryptedNewPassword, currentUsername], (err, result) => {
             if (err) {
                 res.status(500).send({
@@ -104,7 +104,7 @@ async function encryptEdit(req, res){
 app.get("/api/user/:username/:password", (req, res) => {
     const username = req.params.username
     const password = req.params.password
-    const sqlSelect = "SELECT a.Password FROM MODERATOR_ACCOUNT AS a WHERE a.Username = $1"
+    const sqlSelect = "SELECT a.password FROM MODERATOR_ACCOUNT AS a WHERE a.username = $1"
     db.query(sqlSelect, [username], async function (err, result) { //creating seperate function to use await for bycrypt
         if (err) {
             res.status(500).send({
@@ -116,7 +116,7 @@ app.get("/api/user/:username/:password", (req, res) => {
         // Username is not in database, resulting in no password being retrived so check is false
         let hasPassword = true
         try{
-            result[0].password == null
+            result.rows[0].password == null
         }
         catch{
             hasPassword = false
@@ -125,7 +125,7 @@ app.get("/api/user/:username/:password", (req, res) => {
 
         // If username was in database check if corresponding password matches
         if(hasPassword == true){
-            const Check = await bcrypt.compare(password, result[0].Password)
+            const Check = await bcrypt.compare(password, result.rows[0].password)
             res.send(Check)
         }
     });
@@ -135,7 +135,7 @@ app.get("/api/user/:username/:password", (req, res) => {
 // Check if a username is already in the database
 app.get("/api/user/:username", (req, res) => {
     const username = req.params.username
-    const sqlSelect = "SELECT Username FROM MODERATOR_ACCOUNT WHERE Username=$1"
+    const sqlSelect = "SELECT username FROM MODERATOR_ACCOUNT WHERE username=$1"
 
     db.query(sqlSelect, [username], (err, result) => {
         if (err) {
@@ -145,7 +145,7 @@ app.get("/api/user/:username", (req, res) => {
             return
         } 
         // Return true if a result is found
-        if (result.length > 0) {
+        if (result.rows.length > 0) {
             res.send(true)
             return
         } else {
@@ -162,14 +162,13 @@ app.get("/api/user/:username", (req, res) => {
 // 2.1 List Courses
 // View a list of all courses
 app.get("/api/courseList", (req, res) => {
-    const sqlSelect = "SELECT Course_name FROM COURSE"
+    const sqlSelect = "SELECT course_name FROM COURSE"
     db.query(sqlSelect, (err, result) => {
         if (err) {
-          console.error("Error fetching courses:", err);
-          res.status(500).send("Internal Server Error");
+          res.status(500).send({
+            message: "Error when fetching semester information"
+          });
         } else {
-          console.error("GOT COURSES");
-          console.error(result);
           res.send(result)
         }
     });
@@ -177,9 +176,9 @@ app.get("/api/courseList", (req, res) => {
 
 // 2.2 View Course Info
 // View information for a specific course
-app.get("/api/courseInfo/:Course_name", (req, res) => {
+app.get("/api/courseInfo/:course_name", (req, res) => {
     const course_name = req.params.Course_name
-    const sqlSelect = "SELECT * FROM COURSE as c WHERE c.Course_name = $1"
+    const sqlSelect = "SELECT * FROM COURSE as c WHERE c.course_name = $1"
     db.query(sqlSelect, [course_name], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -191,13 +190,13 @@ app.get("/api/courseInfo/:Course_name", (req, res) => {
 
 // 2.3 View Course -> Semester Info
 // View information about the semester where the given course was offered
-app.get("/api/courseInfo/:Course_name/semester", (req, res) => {
+app.get("/api/courseInfo/:course_name/semester", (req, res) => {
     const course_name = req.params.Course_name
     const sqlSelect = (
-        "SELECT s.Sem_start_year, s.Sem_start_term, s.Duration " + 
+        "SELECT s.sem_start_year, s.sem_start_term, s.suration " + 
         "FROM SEMESTER AS s " +
-        "WHERE s.Course_name = $1 " +
-        "ORDER BY s.Sem_start_year DESC, s.Ordering DESC")
+        "WHERE s.course_name = $1 " +
+        "ORDER BY s.sem_start_year DESC, s.ordering DESC")
     db.query(sqlSelect, [course_name], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -209,15 +208,15 @@ app.get("/api/courseInfo/:Course_name/semester", (req, res) => {
 
 // 2.4 View Course -> Semester -> Prof Info
 // View information about the professors that taught the given course in the given semester
-app.get("/api/courseInfo/:Course_name/:Sem_start_year/:Sem_start_term/professor", (req, res) => {
+app.get("/api/courseInfo/:course_name/:sem_start_year/:sem_start_term/professor", (req, res) => {
     const course_name = req.params.Course_name
     const sem_start_year = req.params.Sem_start_year
     const sem_start_term = req.params.Sem_start_term
     const sqlSelect = (
-        "SELECT o.Mode_of_delivery, o.Syllabus_link, p.Prof_name, p.Prof_rating, p.Rate_my_professor_link " + 
+        "SELECT o.mode_of_delivery, o.syllabus_link, p.prof_name, p.prof_rating, p.rate_my_professor_link " + 
         "FROM OFFERED_IN as o NATURAL JOIN PROFESSOR as p " + 
-        "WHERE o.Course_name = $1 and o.Sem_start_year = $2 and o.Sem_start_term = $3 and " +
-        "o.Prof_name = p.Prof_name ")
+        "WHERE o.course_name = $1 and o.sem_start_year = $2 and o.sem_start_term = $3 and " +
+        "o.prof_name = p.prof_name ")
     db.query(sqlSelect, [course_name, sem_start_year, sem_start_term], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -229,12 +228,12 @@ app.get("/api/courseInfo/:Course_name/:Sem_start_year/:Sem_start_term/professor"
 
 // 2.5 View Course -> Required For
 // View which degrees the given course is required for
-app.get("/api/courseInfo/:Course_name/degreeRequired", (req, res) => {
+app.get("/api/courseInfo/:course_name/degreeRequired", (req, res) => {
     const course_name = req.params.Course_name
     const sqlSelect = (
-        "SELECT r.Degree_name " + 
+        "SELECT r.degree_name " + 
         "FROM REQUIRED_FOR AS r " + 
-        "WHERE r.Course_name = $1" )
+        "WHERE r.course_name = $1" )
     db.query(sqlSelect, [course_name], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -246,12 +245,12 @@ app.get("/api/courseInfo/:Course_name/degreeRequired", (req, res) => {
 
 // 2.6 View Course -> Optional For
 // View which degrees the given course is optional for
-app.get("/api/courseInfo/:Course_name/degreeOptional", (req, res) => {
+app.get("/api/courseInfo/:course_name/degreeOptional", (req, res) => {
     const course_name = req.params.Course_name
     const sqlSelect = (
-        "SELECT o.Degree_name " + 
+        "SELECT o.degree_name " + 
         "FROM OPTIONAL_FOR as o " + 
-        "WHERE o.Course_name = $1" )
+        "WHERE o.course_name = $1" )
     db.query(sqlSelect, [course_name], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -268,7 +267,7 @@ app.get("/api/courseInfo/:Course_name/degreeOptional", (req, res) => {
 // 3.1 List of Professors
 // View a list of all professors
 app.get("/api/profList", (req, res) => {
-    const sqlSelect = "SELECT Prof_name FROM PROFESSOR"
+    const sqlSelect = "SELECT prof_name FROM PROFESSOR"
     db.query(sqlSelect, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -282,7 +281,7 @@ app.get("/api/profList", (req, res) => {
 // View information for a specific professor
 app.get("/api/profInfo/:prof_name", (req, res) => {
     const prof_name = req.params.prof_name
-    const sqlSelect = "SELECT * FROM PROFESSOR AS p WHERE p.Prof_name = $1" 
+    const sqlSelect = "SELECT * FROM PROFESSOR AS p WHERE p.prof_name = $1" 
     db.query(sqlSelect, [prof_name], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -297,9 +296,9 @@ app.get("/api/profInfo/:prof_name", (req, res) => {
 app.get("/api/profInfo/:prof_name/courses", (req, res) => {
     const prof_name = req.params.prof_name
     const sqlSelect = (
-        "SELECT DISTINCT o.Course_name " + 
+        "SELECT DISTINCT o.course_name " + 
         "FROM OFFERED_IN AS o NATURAL JOIN PROFESSOR AS p " + 
-        "WHERE p.Prof_name = $1")
+        "WHERE p.prof_name = $1")
     db.query(sqlSelect, [prof_name], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -316,7 +315,7 @@ app.get("/api/profInfo/:prof_name/courses", (req, res) => {
 // 4.1 List Degrees Major
 // View a list of all major degrees
 app.get("/api/degreeList/major", (req, res) => {
-    const sqlSelect = "SELECT d.Degree_name FROM DEGREE as d WHERE d.flag = 1"
+    const sqlSelect = "SELECT d.degree_name FROM DEGREE as d WHERE d.flag = 1"
     db.query(sqlSelect, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -329,7 +328,7 @@ app.get("/api/degreeList/major", (req, res) => {
 // 4.2 List Degrees Minor
 // View a list of all minor degrees
 app.get("/api/degreeList/minor", (req, res) => {
-    const sqlSelect = "SELECT d.Degree_name FROM DEGREE as d WHERE d.flag = 2"
+    const sqlSelect = "SELECT d.degree_name FROM DEGREE as d WHERE d.flag = 2"
     db.query(sqlSelect, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -342,7 +341,7 @@ app.get("/api/degreeList/minor", (req, res) => {
 // 4.3 List Degrees Other
 // View a list of all other degrees
 app.get("/api/degreeList/other", (req, res) => {
-    const sqlSelect = "SELECT d.Degree_name FROM DEGREE as d WHERE d.flag = 3"
+    const sqlSelect = "SELECT d.degree_name FROM DEGREE as d WHERE d.flag = 3"
     db.query(sqlSelect, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -356,7 +355,7 @@ app.get("/api/degreeList/other", (req, res) => {
 // View information for a specific degree
 app.get("/api/degreeInfo/:degree_name", (req, res) => {
     const degree_name = req.params.degree_name
-    const sqlSelect = "SELECT * FROM DEGREE AS d WHERE d.Degree_name = $1" 
+    const sqlSelect = "SELECT * FROM DEGREE AS d WHERE d.degree_name = $1" 
     db.query(sqlSelect, [degree_name], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -371,9 +370,9 @@ app.get("/api/degreeInfo/:degree_name", (req, res) => {
 app.get("/api/degreeInfo/:degree_name/coursesRequired", (req, res) => {
     const degree_name = req.params.degree_name
     const sqlSelect = (
-        "SELECT r.Course_name " +
+        "SELECT r.course_name " +
         "FROM REQUIRED_FOR AS r NATURAL JOIN DEGREE as d " +
-        "WHERE d.Degree_name = $1" )
+        "WHERE d.degree_name = $1" )
     db.query(sqlSelect, [degree_name], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -388,9 +387,9 @@ app.get("/api/degreeInfo/:degree_name/coursesRequired", (req, res) => {
 app.get("/api/degreeInfo/:degree_name/coursesOptional", (req, res) => {
     const degree_name = req.params.degree_name
     const sqlSelect = (
-        "SELECT o.Course_name " +
+        "SELECT o.course_name " +
         "FROM OPTIONAL_FOR AS o NATURAL JOIN DEGREE as d " +
-        "WHERE d.Degree_name = $1" )
+        "WHERE d.degree_name = $1" )
     db.query(sqlSelect, [degree_name], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -409,9 +408,9 @@ app.get("/api/degreeInfo/:degree_name/coursesOptional", (req, res) => {
 app.get("/api/rating/:course_name", (req, res) => {
     const course_name = req.params.course_name
     const sqlSelect = (
-        "SELECT r.Rating_id, r.Comment, r.Score, r.Rating_date, r.Username " +
+        "SELECT r.rating_id, r.comment, r.score, r.rating_date, r.username " +
         "FROM RATING as r " +
-        "WHERE r.Course_name = $1" )
+        "WHERE r.course_name = $1" )
     db.query(sqlSelect, [course_name], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -430,7 +429,7 @@ app.post("/api/rating/:course_name", (req, res) => {
     const username = req.body.username
     const course_name = req.params.course_name
 
-    const sqlInsert = "INSERT INTO RATING (Comment, Score, Rating_date, Username, Course_name) VALUES ($1,$2,$3,$4,$5)"
+    const sqlInsert = "INSERT INTO RATING (comment, score, rating_date, username, course_name) VALUES ($1,$2,$3,$4,$5)"
     db.query(sqlInsert, [comment, score, rating_date, username, course_name], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -451,8 +450,8 @@ app.put("/api/rating/:rating_id", (req, res) => {
 
     const sqlInsert = 
         ("UPDATE RATING AS r " + 
-        "SET r.Comment=$1, r.Score=$2, r.Rating_date=$3 " + 
-        "WHERE r.Rating_id=$4 AND r.Username=$5")
+        "SET r.comment=$1, r.score=$2, r.rating_date=$3 " + 
+        "WHERE r.rating_id=$4 AND r.username=$5")
 
     db.query(sqlInsert, [comment, score, rating_date, rating_id, username], (err, result) => {
         if (err) {
@@ -468,7 +467,7 @@ app.put("/api/rating/:rating_id", (req, res) => {
 // Delete a rating 
 app.delete("/api/rating/:rating_id", (req, res) => {
     const rating_id = req.params.rating_id
-    const sqlDelete = "DELETE FROM RATING WHERE Rating_id = $1"
+    const sqlDelete = "DELETE FROM RATING WHERE rating_id = $1"
     db.query(sqlDelete, [rating_id], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -485,7 +484,7 @@ app.delete("/api/rating/:rating_id", (req, res) => {
 // 6.1 List Reports
 // View a list of all reports
 app.get("/api/reportList", (req, res) => {
-    const sqlSelect = "SELECT Report_id, Report_date FROM REPORT"
+    const sqlSelect = "SELECT report_id, report_date FROM REPORT"
     db.query(sqlSelect, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -499,7 +498,7 @@ app.get("/api/reportList", (req, res) => {
 // View information about a specific report
 app.get("/api/reportInfo/:report_id", (req, res) => {
     const report_id = req.params.report_id
-    const sqlSelect = "SELECT * FROM REPORT WHERE Report_id=$1"
+    const sqlSelect = "SELECT * FROM REPORT WHERE report_id=$1"
     db.query(sqlSelect, [report_id], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -513,9 +512,9 @@ app.get("/api/reportInfo/:report_id", (req, res) => {
 // View information for the specific rating the report pertains to
 app.get("/api/reportInfo/:report_id/rating", (req, res) => {
     const report_id = req.params.report_id
-    const sqlSelect = "SELECT rt.Rating_id, rt.Comment, rt.Score, rt.Rating_date, rt.Username, rt.Course_name " + 
+    const sqlSelect = "SELECT rt.rating_id, rt.comment, rt.score, rt.rating_date, rt.username, rt.course_name " + 
         "FROM REPORT AS rp NATURAL JOIN RATING AS rt " + 
-        "WHERE rp.Report_id=$1"
+        "WHERE rp.report_id=$1"
     db.query(sqlSelect, [report_id], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -532,7 +531,7 @@ app.post("/api/reportInfo", (req, res) => {
     const report_date = req.body.report_date
     const rating_id = req.body.rating_id
     
-    const sqlInsert = "INSERT INTO REPORT (Reason, Report_date, Rating_id) VALUES ($1,$2,$3)"
+    const sqlInsert = "INSERT INTO REPORT (reason, report_date, rating_id) VALUES ($1,$2,$3)"
     db.query(sqlInsert, [reason, report_date, rating_id], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -546,7 +545,7 @@ app.post("/api/reportInfo", (req, res) => {
 // Delete a report
 app.delete("/api/reportInfo/:report_id", (req, res) => {
     const report_id = req.params.report_id
-    const sqlDelete = "DELETE FROM REPORT WHERE Report_id = $1"
+    const sqlDelete = "DELETE FROM REPORT WHERE report_id = $1"
     db.query(sqlDelete, [report_id], (err, result) => {
         if (err) {
             res.status(500).send({

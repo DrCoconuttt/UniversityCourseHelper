@@ -29,7 +29,7 @@ const Login = ({onLogin}) => {
 
         // Log in if passowrd is accurate
         if (data === true){
-            onLogin({username}) //NOTE this used to be {username,password} is something breaks take a peek
+            onLogin({username}) //NOTE this used to be {username,password} if something breaks take a peek
             setLoginError(false)
         }
         else{

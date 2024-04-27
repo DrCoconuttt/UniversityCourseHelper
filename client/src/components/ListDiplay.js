@@ -11,9 +11,9 @@ const ListDisplay = ({list,type,search}) => {
             <div className = "listDisplay">
                 {list.map((val) => {
                     return(
-                        <div key={val.Course_name} value={val}>
-                            {val.Course_name.toLowerCase().includes(search.toString().toLowerCase())? 
-                            <Link to={`/courses/${val.Course_name}`} style={{ textDecoration: 'none' }}> {val.Course_name} </Link> : ""}
+                        <div key={val.course_name} value={val}>
+                            {val.course_name.toLowerCase().includes(search.toString().toLowerCase())? 
+                            <Link to={`/courses/${val.course_name}`} style={{ textDecoration: 'none' }}> {val.course_name} </Link> : ""}
                         </div>
                     );
                     })}
@@ -25,9 +25,9 @@ const ListDisplay = ({list,type,search}) => {
             <div className = "listDisplay">
                 {list.map((val) => {
                     return(
-                        <div key={val.Prof_name} value={val}>
-                            {val.Prof_name.toLowerCase().includes(search.toString().toLowerCase())? 
-                            <Link to={`/professors/${val.Prof_name}`} style={{ textDecoration: 'none' }}>{val.Prof_name}</Link> : ""}
+                        <div key={val.prof_name} value={val}>
+                            {val.prof_name.toLowerCase().includes(search.toString().toLowerCase())? 
+                            <Link to={`/professors/${val.prof_name}`} style={{ textDecoration: 'none' }}>{val.prof_name}</Link> : ""}
                         </div>
                     );
                 })}
@@ -39,9 +39,9 @@ const ListDisplay = ({list,type,search}) => {
             <div className = "listDisplay">
                 {list.map((val) => {
                     return(
-                        <div key={val.Degree_name} value={val}>
-                            {val.Degree_name.toLowerCase().includes(search.toString().toLowerCase())? 
-                            <Link to={`/degrees/${val.Degree_name}`} style={{ textDecoration: 'none' }}>{val.Degree_name}</Link> : ""}
+                        <div key={val.degree_name} value={val}>
+                            {val.degree_name.toLowerCase().includes(search.toString().toLowerCase())? 
+                            <Link to={`/degrees/${val.degree_name}`} style={{ textDecoration: 'none' }}>{val.degree_name}</Link> : ""}
                         </div>
                     );
                 })}
@@ -53,8 +53,8 @@ const ListDisplay = ({list,type,search}) => {
             <div className = "listDisplay">
                 {list.map((val) => {
                     return(
-                        <div key={val.Report_id} value={val}>
-                            <Link to={`/reports/${val.Report_id}`} style={{ textDecoration: 'none' }}>Report {val.Report_id}</Link>
+                        <div key={val.report_id} value={val}>
+                            <Link to={`/reports/${val.report_id}`} style={{ textDecoration: 'none' }}>Report {val.report_id}</Link>
                         </div>
                     )
                 })}
