@@ -24,11 +24,6 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-//Think this is to connect to heroku, which is port 3001, not related to database
-app.listen(process.env.PORT || 3001, () => {
-  console.log("running");
-});
-
 // -------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------- Moderator Account ----------------------------------------------
 // -------------------------------------------------------------------------------------------------------------------
