@@ -9,6 +9,7 @@ const ListDisplay = ({list,type,search}) => {
         //(note all other if statements below do the same thing, just with a different path)
         return (
             <div className = "listDisplay">
+                {console.log(val)}
                 {list.map((val) => {
                     return(
                         <div key={val.Course_name} value={val}>
