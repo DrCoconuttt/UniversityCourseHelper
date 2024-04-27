@@ -177,7 +177,7 @@ app.get("/api/courseList", (req, res) => {
 // 2.2 View Course Info
 // View information for a specific course
 app.get("/api/courseInfo/:course_name", (req, res) => {
-    const course_name = req.params.Course_name
+    const course_name = req.params.course_name
     const sqlSelect = "SELECT * FROM COURSE as c WHERE c.course_name = $1"
     db.query(sqlSelect, [course_name], (err, result) => {
         if (err) {
