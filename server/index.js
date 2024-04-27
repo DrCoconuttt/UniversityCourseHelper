@@ -1,8 +1,8 @@
 require('dotenv').config();
 
+const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser')
-const cors = require('cors')
 const app = express();
 const { Pool } = require('pg')
 
@@ -10,22 +10,23 @@ const { Pool } = require('pg')
 // Not using .env file because hosting online
 const db = new Pool({
   connectionLimit: 100,
-  host: 'aws-0-ca-central-1.pooler.supabase.com',
-  user: 'postgres.drzovxoxtufhivwffoyd',
-  password: 'F#G#A129!pumpkin',
-  database: 'postgres',
+  host: 'comcv9gl6cac73d5f350-a.oregon-postgres.render.com',
+  user: 'universitycoursehelperrenderdatabase_user',
+  password: 's8tMXDHZjkDtkxaBaDpoETzqhwkAwtzx',
+  database: 'universitycoursehelperrenderdatabase',
   port: '5432',
   ssl: {
       rejectUnauthorized: false
   }
 });
 
-app.use(cors())
-app.use(express.json()) // Used for parsing application/json
-app.use(bodyParser.urlencoded({extended: true})) // For parsing application/x-www-form-urlencoded
+app.use(cors());
+app.use(express.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
-app.listen(5432, () => {
-  console.log("Server is running");
+//Think this is to connect to heroku, which is port 3001, not related to database
+app.listen(process.env.PORT || 3001, () => {
+  console.log("running");
 });
 
 // -------------------------------------------------------------------------------------------------------------------
@@ -50,7 +51,7 @@ async function encryptCreate(req, res){
 
     const encryptedPassword = await bcrypt.hash(password, saltRounds)
 
-    const sqlInsert = "INSERT INTO MODERATOR_ACCOUNT (Username, Password) VALUES (?,?)"
+    const sqlInsert = "INSERT INTO MODERATOR_ACCOUNT (Username, Password) VALUES ($1,$2)"
     db.query(sqlInsert, [username, encryptedPassword], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -76,7 +77,7 @@ async function encryptEdit(req, res){
 
     // Deal with case of user entering same username they already had
     if(newUsername != currentUsername){
-        const sqlInsert = "UPDATE MODERATOR_ACCOUNT AS a SET a.Password=?, a.Username=? WHERE a.Username=?"
+        const sqlInsert = "UPDATE MODERATOR_ACCOUNT AS a SET a.Password=$1, a.Username=$2 WHERE a.Username=$3"
         db.query(sqlInsert, [encryptedNewPassword, newUsername, currentUsername], (err, result) => {
             if (err) {
                 res.status(500).send({
@@ -87,7 +88,7 @@ async function encryptEdit(req, res){
     }
     //deal with case of user entering new username
     else{
-        const sqlInsert = "UPDATE MODERATOR_ACCOUNT AS a SET a.Password=? WHERE a.Username=?"
+        const sqlInsert = "UPDATE MODERATOR_ACCOUNT AS a SET a.Password=$1 WHERE a.Username=$2"
         db.query(sqlInsert, [encryptedNewPassword, currentUsername], (err, result) => {
             if (err) {
                 res.status(500).send({
@@ -103,7 +104,7 @@ async function encryptEdit(req, res){
 app.get("/api/user/:username/:password", (req, res) => {
     const username = req.params.username
     const password = req.params.password
-    const sqlSelect = "SELECT a.Password FROM MODERATOR_ACCOUNT AS a WHERE a.Username = ?"
+    const sqlSelect = "SELECT a.Password FROM MODERATOR_ACCOUNT AS a WHERE a.Username = $1"
     db.query(sqlSelect, [username], async function (err, result) { //creating seperate function to use await for bycrypt
         if (err) {
             res.status(500).send({
@@ -134,7 +135,7 @@ app.get("/api/user/:username/:password", (req, res) => {
 // Check if a username is already in the database
 app.get("/api/user/:username", (req, res) => {
     const username = req.params.username
-    const sqlSelect = "SELECT Username FROM MODERATOR_ACCOUNT WHERE Username=?"
+    const sqlSelect = "SELECT Username FROM MODERATOR_ACCOUNT WHERE Username=$1"
 
     db.query(sqlSelect, username, (err, result) => {
         if (err) {
@@ -164,9 +165,8 @@ app.get("/api/courseList", (req, res) => {
     const sqlSelect = "SELECT Course_name FROM COURSE"
     db.query(sqlSelect, (err, result) => {
         if (err) {
-            res.status(500).send({
-                message: "Error when fetching courses"
-            });
+          console.error("Error fetching courses:", err);
+          res.status(500).send("Internal Server Error");
         } else res.send(result)
     });
 })
@@ -175,7 +175,7 @@ app.get("/api/courseList", (req, res) => {
 // View information for a specific course
 app.get("/api/courseInfo/:Course_name", (req, res) => {
     const course_name = req.params.Course_name
-    const sqlSelect = "SELECT * FROM COURSE as c WHERE c.Course_name = ?"
+    const sqlSelect = "SELECT * FROM COURSE as c WHERE c.Course_name = $1"
     db.query(sqlSelect, course_name, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -192,7 +192,7 @@ app.get("/api/courseInfo/:Course_name/semester", (req, res) => {
     const sqlSelect = (
         "SELECT s.Sem_start_year, s.Sem_start_term, s.Duration " + 
         "FROM SEMESTER AS s " +
-        "WHERE s.Course_name = ? " +
+        "WHERE s.Course_name = $1 " +
         "ORDER BY s.Sem_start_year DESC, s.Ordering DESC")
     db.query(sqlSelect, course_name, (err, result) => {
         if (err) {
@@ -212,7 +212,7 @@ app.get("/api/courseInfo/:Course_name/:Sem_start_year/:Sem_start_term/professor"
     const sqlSelect = (
         "SELECT o.Mode_of_delivery, o.Syllabus_link, p.Prof_name, p.Prof_rating, p.Rate_my_professor_link " + 
         "FROM OFFERED_IN as o NATURAL JOIN PROFESSOR as p " + 
-        "WHERE o.Course_name = ? and o.Sem_start_year = ? and o.Sem_start_term = ? and " +
+        "WHERE o.Course_name = $1 and o.Sem_start_year = $2 and o.Sem_start_term = $3 and " +
         "o.Prof_name = p.Prof_name ")
     db.query(sqlSelect, [course_name, sem_start_year, sem_start_term], (err, result) => {
         if (err) {
@@ -230,7 +230,7 @@ app.get("/api/courseInfo/:Course_name/degreeRequired", (req, res) => {
     const sqlSelect = (
         "SELECT r.Degree_name " + 
         "FROM REQUIRED_FOR AS r " + 
-        "WHERE r.Course_name = ?" )
+        "WHERE r.Course_name = $1" )
     db.query(sqlSelect, course_name, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -247,7 +247,7 @@ app.get("/api/courseInfo/:Course_name/degreeOptional", (req, res) => {
     const sqlSelect = (
         "SELECT o.Degree_name " + 
         "FROM OPTIONAL_FOR as o " + 
-        "WHERE o.Course_name = ?" )
+        "WHERE o.Course_name = $1" )
     db.query(sqlSelect, course_name, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -278,7 +278,7 @@ app.get("/api/profList", (req, res) => {
 // View information for a specific professor
 app.get("/api/profInfo/:prof_name", (req, res) => {
     const prof_name = req.params.prof_name
-    const sqlSelect = "SELECT * FROM PROFESSOR AS p WHERE p.Prof_name = ?" 
+    const sqlSelect = "SELECT * FROM PROFESSOR AS p WHERE p.Prof_name = $1" 
     db.query(sqlSelect, prof_name, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -295,7 +295,7 @@ app.get("/api/profInfo/:prof_name/courses", (req, res) => {
     const sqlSelect = (
         "SELECT DISTINCT o.Course_name " + 
         "FROM OFFERED_IN AS o NATURAL JOIN PROFESSOR AS p " + 
-        "WHERE p.Prof_name = ?")
+        "WHERE p.Prof_name = $1")
     db.query(sqlSelect, prof_name, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -352,7 +352,7 @@ app.get("/api/degreeList/other", (req, res) => {
 // View information for a specific degree
 app.get("/api/degreeInfo/:degree_name", (req, res) => {
     const degree_name = req.params.degree_name
-    const sqlSelect = "SELECT * FROM DEGREE AS d WHERE d.Degree_name = ?" 
+    const sqlSelect = "SELECT * FROM DEGREE AS d WHERE d.Degree_name = $1" 
     db.query(sqlSelect, degree_name, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -369,7 +369,7 @@ app.get("/api/degreeInfo/:degree_name/coursesRequired", (req, res) => {
     const sqlSelect = (
         "SELECT r.Course_name " +
         "FROM REQUIRED_FOR AS r NATURAL JOIN DEGREE as d " +
-        "WHERE d.Degree_name = ?" )
+        "WHERE d.Degree_name = $1" )
     db.query(sqlSelect, degree_name, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -386,7 +386,7 @@ app.get("/api/degreeInfo/:degree_name/coursesOptional", (req, res) => {
     const sqlSelect = (
         "SELECT o.Course_name " +
         "FROM OPTIONAL_FOR AS o NATURAL JOIN DEGREE as d " +
-        "WHERE d.Degree_name = ?" )
+        "WHERE d.Degree_name = $1" )
     db.query(sqlSelect, degree_name, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -407,7 +407,7 @@ app.get("/api/rating/:course_name", (req, res) => {
     const sqlSelect = (
         "SELECT r.Rating_id, r.Comment, r.Score, r.Rating_date, r.Username " +
         "FROM RATING as r " +
-        "WHERE r.Course_name = ?" )
+        "WHERE r.Course_name = $1" )
     db.query(sqlSelect, course_name, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -426,7 +426,7 @@ app.post("/api/rating/:course_name", (req, res) => {
     const username = req.body.username
     const course_name = req.params.course_name
 
-    const sqlInsert = "INSERT INTO RATING (Comment, Score, Rating_date, Username, Course_name) VALUES (?,?,?,?,?)"
+    const sqlInsert = "INSERT INTO RATING (Comment, Score, Rating_date, Username, Course_name) VALUES ($1,$2,$3,$4,$5)"
     db.query(sqlInsert, [comment, score, rating_date, username, course_name], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -447,8 +447,8 @@ app.put("/api/rating/:rating_id", (req, res) => {
 
     const sqlInsert = 
         ("UPDATE RATING AS r " + 
-        "SET r.Comment=?, r.Score=?, r.Rating_date=? " + 
-        "WHERE r.Rating_id=? AND r.Username=?")
+        "SET r.Comment=$1, r.Score=$2, r.Rating_date=$3 " + 
+        "WHERE r.Rating_id=$4 AND r.Username=$5")
 
     db.query(sqlInsert, [comment, score, rating_date, rating_id, username], (err, result) => {
         if (err) {
@@ -464,7 +464,7 @@ app.put("/api/rating/:rating_id", (req, res) => {
 // Delete a rating 
 app.delete("/api/rating/:rating_id", (req, res) => {
     const rating_id = req.params.rating_id
-    const sqlDelete = "DELETE FROM RATING WHERE Rating_id = ?"
+    const sqlDelete = "DELETE FROM RATING WHERE Rating_id = $1"
     db.query(sqlDelete, rating_id, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -495,7 +495,7 @@ app.get("/api/reportList", (req, res) => {
 // View information about a specific report
 app.get("/api/reportInfo/:report_id", (req, res) => {
     const report_id = req.params.report_id
-    const sqlSelect = "SELECT * FROM REPORT WHERE Report_id=?"
+    const sqlSelect = "SELECT * FROM REPORT WHERE Report_id=$1"
     db.query(sqlSelect, report_id, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -511,7 +511,7 @@ app.get("/api/reportInfo/:report_id/rating", (req, res) => {
     const report_id = req.params.report_id
     const sqlSelect = "SELECT rt.Rating_id, rt.Comment, rt.Score, rt.Rating_date, rt.Username, rt.Course_name " + 
         "FROM REPORT AS rp NATURAL JOIN RATING AS rt " + 
-        "WHERE rp.Report_id=?"
+        "WHERE rp.Report_id=$1"
     db.query(sqlSelect, report_id, (err, result) => {
         if (err) {
             res.status(500).send({
@@ -528,7 +528,7 @@ app.post("/api/reportInfo", (req, res) => {
     const report_date = req.body.report_date
     const rating_id = req.body.rating_id
     
-    const sqlInsert = "INSERT INTO REPORT (Reason, Report_date, Rating_id) VALUES (?,?,?)"
+    const sqlInsert = "INSERT INTO REPORT (Reason, Report_date, Rating_id) VALUES ($1,$2,$3)"
     db.query(sqlInsert, [reason, report_date, rating_id], (err, result) => {
         if (err) {
             res.status(500).send({
@@ -542,7 +542,7 @@ app.post("/api/reportInfo", (req, res) => {
 // Delete a report
 app.delete("/api/reportInfo/:report_id", (req, res) => {
     const report_id = req.params.report_id
-    const sqlDelete = "DELETE FROM REPORT WHERE Report_id = ?"
+    const sqlDelete = "DELETE FROM REPORT WHERE Report_id = $1"
     db.query(sqlDelete, report_id, (err, result) => {
         if (err) {
             res.status(500).send({
