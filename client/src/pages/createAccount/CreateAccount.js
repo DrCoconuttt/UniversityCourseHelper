@@ -25,9 +25,9 @@ const CreateAccount = () => {
         try {
             // Check if username in database
             const usernameAlreadyDefined = await Axios.get(`https://universitycoursehelperdeployednetlifyren.onrender.com/api/user/${Username}`)
-            const data = await usernameAlreadyDefined.data.rows
+            const data = await usernameAlreadyDefined.data
 
-            if (data.length > 0) {
+            if (data) {
                 setSuccess(false)
                 setFailure(true)
             } else {

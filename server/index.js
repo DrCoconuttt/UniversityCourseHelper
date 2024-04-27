@@ -193,7 +193,7 @@ app.get("/api/courseInfo/:course_name", (req, res) => {
 app.get("/api/courseInfo/:course_name/semester", (req, res) => {
     const course_name = req.params.Course_name
     const sqlSelect = (
-        "SELECT s.sem_start_year, s.sem_start_term, s.suration " + 
+        "SELECT s.sem_start_year, s.sem_start_term, s.duration " + 
         "FROM SEMESTER AS s " +
         "WHERE s.course_name = $1 " +
         "ORDER BY s.sem_start_year DESC, s.ordering DESC")
