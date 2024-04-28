@@ -2,6 +2,7 @@
 
 ## Live Demo
 Note it may take a minute to load the database contents
+
 https://university-course-helper.netlify.app/
 
 ## About
