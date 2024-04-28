@@ -10,11 +10,11 @@ const { Pool } = require('pg')
 // Not using .env file because hosting online
 const db = new Pool({
   connectionLimit: 100,
-  host: 'comcv9gl6cac73d5f350-a.oregon-postgres.render.com',
-  user: 'universitycoursehelperrenderdatabase_user',
-  password: 's8tMXDHZjkDtkxaBaDpoETzqhwkAwtzx',
-  database: 'universitycoursehelperrenderdatabase',
-  port: '5432',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
   ssl: {
       rejectUnauthorized: false
   }
