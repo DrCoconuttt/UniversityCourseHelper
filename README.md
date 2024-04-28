@@ -1,7 +1,7 @@
 # UniversityCourseHelper
 
 ## Live Demo
-Note it may take a minute to load the database contents
+Note it may take a minute to load the database contents, this is because Render needs time to spin up when using the free version.
 
 https://university-course-helper.netlify.app/
 
