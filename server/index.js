@@ -164,11 +164,14 @@ app.get("/api/user/:username", (req, res) => {
 app.get("/api/courseList", (req, res) => {
     const sqlSelect = "SELECT course_name FROM COURSE"
     db.query(sqlSelect, (err, result) => {
-        if (err) {
-          res.status(500).send({
-            message: "Error when fetching semester information"
-          });
-        } else {
+      if (err) {
+        console.error("CourseList database query error:", err);
+
+        res.status(500).send({
+            message: "Error when fetching course information",
+            error: err.message
+        });
+      } else {
           res.send(result)
         }
     });
