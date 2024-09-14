@@ -17,7 +17,12 @@ const db = new Pool({
   port: process.env.DB_PORT,
   ssl: {
       rejectUnauthorized: false
-  }
+  },
+  // Pooling options
+  max: 7,
+  idleTimeoutMillis: 300000,
+  connectionTimeoutMillis: 60000,
+  acquireTimeoutMillis: 60000,
 });
 
 app.use(cors());
@@ -165,7 +170,11 @@ app.get("/api/courseList", (req, res) => {
     const sqlSelect = "SELECT course_name FROM COURSE"
     db.query(sqlSelect, (err, result) => {
       if (err) {
-        console.error("CourseList database query error:", err);
+        console.error("CourseList database query error:", {
+          message: err.message,
+          stack: err.stack,
+          query: sqlSelect,
+        });
 
         res.status(500).send({
             message: "Error when fetching course information",
