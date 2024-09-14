@@ -19,10 +19,10 @@ const db = new Pool({
       rejectUnauthorized: false
   },
   // Pooling options
-  max: 7,
+  max: 0,
   idleTimeoutMillis: 300000,
-  connectionTimeoutMillis: 60000,
-  acquireTimeoutMillis: 60000,
+  connectionTimeoutMillis: 600000,
+  acquireTimeoutMillis: 600000,
 });
 
 app.use(cors());
