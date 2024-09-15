@@ -1,10 +1,5 @@
 # UniversityCourseHelper
 
-## Live Demo
-https://university-course-helper.netlify.app/
-
-Note that it may take a minute to load the database contents, this is because Render needs time to spin up.
-
 ## About
 UniversityCourseHelper is a full-stack CRUD web application that enables students to rate their professors. It was developed using React, Node.js and Express. The version hosted on this repository uses a PostgreSQL database and is hosted with Render and Netlify.
 
