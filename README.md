@@ -1,4 +1,6 @@
 # UniversityCourseHelper
+
+## Live Demo
 [University Course Helper](https://university-course-helper.netlify.app/)
 
 Note that it may take a few minutes to load the database contents, this is because Render needs time to spin up.
